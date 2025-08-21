@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Equipment {
+  id          String       @id @default(uuid())
+  name        String
+  category    EquipmentCategory
+  status      EquipmentStatus
+  reservations Reservation[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Employee {
+  id           String         @id @default(uuid())
+  name         String
+  department   String
+  reservations Reservation[] 
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Reservation {
+  id          String          @id @default(uuid())
+  startDate   DateTime
+  endDate     DateTime?
+  equipment   Equipment    @relation(fields: [equipmentId], references: [id])
+  equipmentId String
+  employee    Employee     @relation(fields: [employeeId], references: [id])
+  employeeId  String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+enum EquipmentCategory {
+  NOTEBOOK 
+  PROJECTOR
+  CAMERA
+  TOOL
+  OTHER
+}
+
+
+enum EquipmentStatus {
+  AVAILABLE
+  IN_MAINTENANCE
+  BORROWED
+}
