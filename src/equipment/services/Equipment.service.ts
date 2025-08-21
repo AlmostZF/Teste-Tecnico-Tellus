@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { EquipmentRepository } from '../repositories/EquipmentRepository';
 
 import { Categories, categoriesToEquipmentMap } from '../../enums/Categories';
@@ -6,6 +6,7 @@ import { Status, statusToEquipmentMap } from '../../enums/Status';
 import { CreateEquipmentDto } from '../dtos/CreateEquipmentDto';
 import { DeleteEquipmentDto } from '../dtos/DeleteEquipmentDto';
 import { UpdateEquipmentDto } from '../dtos/UpdateEquipmentDto';
+import { ReturnEquipmentDto } from '../dtos/ReturnEquipmentDto';
 
 
 
@@ -14,15 +15,16 @@ export class EquipmentService {
 
     constructor(private readonly equipmentRepository: EquipmentRepository) { }
 
-    async findByCategory(category: Categories) {
+    async findByCategory(category: Categories): Promise<ReturnEquipmentDto[]> {
 
         if (!categoriesToEquipmentMap[category]) {
-            throw new Error('Invalid equipment category');
+            throw new BadRequestException('Invalid equipment category');
         }
 
         if (!category) {
-            throw new Error('Category is required');
+            throw new BadRequestException('Category is required');
         }
+
         try {
 
             const categorymapper = categoriesToEquipmentMap[category]
@@ -34,14 +36,16 @@ export class EquipmentService {
 
     }
 
-    async findByStatus(status: Status) {
+    async findByStatus(status: Status): Promise<ReturnEquipmentDto[]> {
 
         if (!status) {
-            throw new Error('Status is required');
+            throw new BadRequestException('Status is required');
         }
+        
         if (!statusToEquipmentMap[status]) {
-            throw new Error('Invalid equipment status');
+            throw new BadRequestException('Invalid equipment status');
         }
+
         try {
             const statusMapper = statusToEquipmentMap[status];
             return await this.equipmentRepository.findByStatus(statusMapper);
@@ -52,10 +56,11 @@ export class EquipmentService {
 
     }
 
-    async findById(id: string) {
+    async findById(id: string): Promise<ReturnEquipmentDto> {
         if (!id) {
-            throw new Error('Equipment Id cannot be empty');
+            throw new BadRequestException('Equipment Id cannot be empty');
         }
+
         try {
             return await this.equipmentRepository.findById(id);
 
@@ -65,11 +70,12 @@ export class EquipmentService {
         }
     }
 
-    async create(equipment: CreateEquipmentDto) {
+    async create(equipment: CreateEquipmentDto): Promise<ReturnEquipmentDto> {
 
         if (!equipment.name || !equipment.category) {
-            throw new Error('Equipment name and category are required');
+            throw new BadRequestException('Equipment name and category are required');
         }
+
         try {
 
             return await this.equipmentRepository.create(equipment);
@@ -78,16 +84,16 @@ export class EquipmentService {
         }
     }
 
-    async update(equipment: UpdateEquipmentDto) {
+    async update(equipment: UpdateEquipmentDto): Promise<ReturnEquipmentDto> {
 
-          const { id, name, category, status } = equipment;
+        const { id, name, category, status } = equipment;
         if (!id || !name || !category) {
-            throw new Error('Equipment Id, name, and category are required');
+            throw new BadRequestException('Equipment Id, name, and category are required');
         }
+
         const existingEmployee = await this.equipmentRepository.findById(id);
-        
         if (!existingEmployee) {
-            throw new Error(`equipment with id ${id} not found`);
+            throw new BadRequestException(`equipment with id ${id} not found`);
         }
 
         try {
@@ -99,21 +105,21 @@ export class EquipmentService {
 
     }
 
-    async delete(deleteEquipment: DeleteEquipmentDto) {
+    async delete(deleteEquipment: DeleteEquipmentDto): Promise<void> {
 
         const { id } = deleteEquipment;
         if (!deleteEquipment || !id) {
-            throw new Error('Equipment Id cannot be empty');
+            throw new BadRequestException('Equipment Id cannot be empty');
+        }
+
+        const verifyEquipment = await this.equipmentRepository.findById(id);
+        if (verifyEquipment.reservations && verifyEquipment.reservations.length > 0) {
+            throw new BadRequestException(`Cannot delete equipment with id ${id} because it has associated reservations`);
         }
 
         try {
-            const verifyEquipment = await this.equipmentRepository.findById(id);
 
-            if (verifyEquipment.reservations && verifyEquipment.reservations.length > 0) {
-                throw new Error(`Cannot delete equipment with id ${id} because it has associated reservations`);
-            }
-
-            return this.equipmentRepository.delete(deleteEquipment);
+            await this.equipmentRepository.delete(deleteEquipment);
         } catch (error) {
             throw new InternalServerErrorException(`Failed to delete equipment with id ${id}`);
         }

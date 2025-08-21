@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ReturnEmployeeDto } from "../dtos/ReturnEmployeeDto";
 import { EmployeeRepository } from "../repositories/EmployeeRespository";
 import { CreateEmployeeDto } from "../dtos/CreateEmployeeDto";
@@ -12,8 +12,9 @@ export class EmployeeService{
 
     async findByName(name: string): Promise<ReturnEmployeeDto[]> {
         if(name === undefined){
-            throw new Error("Name is required");
+            throw new BadRequestException("Name is required");
         }
+
         try {
             return await this.employeeRepository.findByName(name);
         } catch (error) {
@@ -23,7 +24,7 @@ export class EmployeeService{
 
     async findById(id: string): Promise<ReturnEmployeeDto> {
         if(!id){
-            throw new Error("Id is required");
+            throw new BadRequestException("Id is required");
         }
 
         try {
@@ -35,8 +36,9 @@ export class EmployeeService{
 
     async create(employee: CreateEmployeeDto): Promise<ReturnEmployeeDto> {
         if(!employee.name || !employee.department){
-            throw new Error("Name and department are required");
+            throw new BadRequestException("Name and department are required");
         }
+
         try {
             return await this.employeeRepository.create(employee);
             
@@ -48,13 +50,12 @@ export class EmployeeService{
 
     async update(employee: UpdateEmployeeDto): Promise<ReturnEmployeeDto> {
         if(!employee.id){
-            throw new Error(" Id cannot be empty");
+            throw new BadRequestException(" Id cannot be empty");
         }
         
         const existingEmployee = await this.employeeRepository.findById(employee.id);
-        
         if(!existingEmployee){
-            throw new Error(`Employee with id ${employee.id} not found`);
+            throw new BadRequestException(`Employee with id ${employee.id} not found`);
         }
 
         try {
@@ -67,15 +68,17 @@ export class EmployeeService{
 
     async delete(employee: DeleteEmployeeDto): Promise<void> {
         if(!employee.id){
-            throw new Error(" Id cannot be empty");
+            throw new BadRequestException(" Id cannot be empty");
         }
         
+        const existingEmployee = await this.employeeRepository.findById(employee.id);
+        if(!existingEmployee){
+            throw new BadRequestException(`Employee with id ${employee.id} not found`);
+        }
+
         try {
-            const existingEmployee = await this.employeeRepository.findById(employee.id);
-            if(!existingEmployee){
-                throw new Error(`Employee with id ${employee.id} not found`);
-            }
-            return await this.employeeRepository.delete(employee);
+            await this.employeeRepository.delete(employee);
+
         } catch (error) {
             throw new InternalServerErrorException('Failed to delete Employee');
         }

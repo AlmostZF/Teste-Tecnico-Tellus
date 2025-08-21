@@ -2,7 +2,7 @@ import { EquipmentStatus } from "@prisma/client";
 
 export enum Status {
     AVAILABLE = 'disponivel',
-    IN_MAINTENANCE = 'manutencao',
+    IN_MAINTENANCE = 'em_manutencao',
     BORROWED = 'emprestado',
 }
 

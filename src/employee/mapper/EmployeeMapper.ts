@@ -9,13 +9,13 @@ type EmployeeWithReservations = Prisma.EmployeeGetPayload<{
 }>;
 
 export class EmployeeMapper {
-    static toReturnDto(employee: EmployeeWithReservations): ReturnEmployeeDto {
+    static toReturnDto(employee: Partial<EmployeeWithReservations>): ReturnEmployeeDto {
         return new ReturnEmployeeDto(
-            employee.id,
-            employee.name,
-            employee.department,
-            employee.createdAt,
-            employee.updatedAt,
+            employee.id!,
+            employee.name!,
+            employee.department!,
+            employee.createdAt!,
+            employee.updatedAt!,
             employee.reservations || [],
         );
     }

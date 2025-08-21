@@ -140,7 +140,7 @@ describe('EquipmentService', () => {
             });
 
             await expect(service.delete({ id: '1' })).rejects.toThrow(
-                `Failed to delete equipment with id 1`,
+                `Cannot delete equipment with id 1 because it has associated reservations`,
             );
         });
     })

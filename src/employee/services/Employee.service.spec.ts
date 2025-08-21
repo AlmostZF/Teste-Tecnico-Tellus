@@ -10,7 +10,7 @@ describe('EmployeeService', () => {
 
     let MockDto: ReturnEmployeeDto = {
         id: '1',
-        name: 'John Doe',
+        name: 'José',
         department: 'Engineering',
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -40,7 +40,7 @@ describe('EmployeeService', () => {
 
     describe('create', () => {
         it('should create a valid employee', async () => {
-            const employee = { name: 'John Doe', department: 'Engineering' };
+            const employee = { name: 'José', department: 'Engineering' };
             repository.create.mockResolvedValue({
                 id: '1',
                 ...employee,
@@ -119,8 +119,8 @@ describe('EmployeeService', () => {
         it('should return employees by name', async () => {
             repository.findByName.mockResolvedValue([MockDto]);
 
-            const result = await service.findByName('John Doe');
-            expect(repository.findByName).toHaveBeenCalledWith('John Doe');
+            const result = await service.findByName('José');
+            expect(repository.findByName).toHaveBeenCalledWith('José');
             expect(result).toEqual([MockDto]);
         });
 

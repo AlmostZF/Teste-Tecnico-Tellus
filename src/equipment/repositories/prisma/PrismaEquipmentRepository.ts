@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { EquipmentRepository } from '../EquipmentRepository';
 import { EquipmentCategory, EquipmentStatus } from '@prisma/client';
-import { CreateEquipmentDto } from 'src/equipment/dtos/CreateEquipmentDto';
-import { DeleteEquipmentDto } from 'src/equipment/dtos/DeleteEquipmentDto';
+import { CreateEquipmentDto } from '../../../equipment/dtos/CreateEquipmentDto';
+import { DeleteEquipmentDto } from '../../../equipment/dtos/DeleteEquipmentDto';
 
-import { PrismaService } from 'src/database/prisma.service';
-import { EquipmentMapper } from 'src/equipment/mapper/EquipmentMapper';
-import { ReturnEquipmentDto } from 'src/equipment/dtos/ReturnEquipmentDto';
-import { UpdateEquipmentDto } from 'src/equipment/dtos/UpdateEquipmentDto';
+import { PrismaService } from '../../../database/prisma.service';
+import { EquipmentMapper } from '../../../equipment/mapper/EquipmentMapper';
+import { ReturnEquipmentDto } from '../../../equipment/dtos/ReturnEquipmentDto';
+import { UpdateEquipmentDto } from '../../../equipment/dtos/UpdateEquipmentDto';
 
 
 @Injectable()
