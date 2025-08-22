@@ -29,15 +29,16 @@ Este projeto é uma solução para o teste técnico proposto, com o objetivo de 
 - [Funcionalidades Implementadas](#funcionalidades-implementadas)
 - [Regras de Negócio](#regras-de-negócio)
 - [Estrutura do Projeto](#estrutura-do-projeto)
-- [Arquitetura](#Arquitetura)
+- [Arquitetura](#arquitetura)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Como Executar o Projeto](#como-executar-o-projeto)
 - [Alternativa: Rodar via Docker](#alternativa-rodar-via-docker)
 - [Documentação da API](#documentação-da-api)
 - [Testes](#testes)
 
+---
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```plaintext
 
@@ -71,7 +72,7 @@ Este projeto é uma solução para o teste técnico proposto, com o objetivo de 
 
 ---
 
-## 🏗 Arquitetura
+## Arquitetura
 
 A aplicação segue a **arquitetura modular do NestJS** com conceitos de **DDD** para organizar o domínio do negócio e também princípios da **Clean Architecture**, garantindo inversão de dependências e isolamento da lógica de negócio das implementações externas,
 
@@ -92,7 +93,7 @@ A aplicação segue a **arquitetura modular do NestJS** com conceitos de **DDD**
 
 ---
 
-## 🛠 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **NestJS** → Framework para aplicações Node.js.
 - **TypeScript** → Superset do JavaScript com tipagem estática.
@@ -103,7 +104,7 @@ A aplicação segue a **arquitetura modular do NestJS** com conceitos de **DDD**
 
 ---
 
-## ▶️ Como Executar o Projeto
+##  Como Executar o Projeto
 
 ### Pré-requisitos
 
@@ -155,7 +156,7 @@ http://localhost:3000/api
 
 ---
 
-## ⚡ Alternativa: Rodar via Docker
+## Alternativa: Rodar via Docker
 ### 1. Buildar as imagens:
 ```bash
 docker compose build
@@ -175,7 +176,7 @@ http://localhost:3000/api
 > Assim você não precisa instalar Node.js ou PostgreSQL localmente — o Docker cuida de tudo.
 
 
-## 📖 Documentação da API
+## Documentação da API
 
 A API está documentada com **Swagger**.  
 Após iniciar o servidor, acesse:
@@ -185,7 +186,7 @@ Após iniciar o servidor, acesse:
 Lá você poderá visualizar e testar todos os endpoints diretamente pelo navegador.
 
 
-## 🧪 Testes
+## Testes
 
 Para rodar os testes unitários:
 
