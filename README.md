@@ -1,6 +1,6 @@
 # Teste Técnico – Sistema de Gestão de Equipamentos e Reservas
 
-Este projeto é uma solução para o teste técnico proposto, com o objetivo de desenvolver uma API RESTful para gerenciar o uso de equipamentos por funcionários de uma empresa. A aplicação permite cadastrar e gerenciar **equipamentos**, **funcionários** e **reservas**, seguindo regras específicas de negócio para garantir o uso adequado dos recursos.
+Este projeto é uma solução para o teste técnico proposto, com o objetivo de desenvolver uma API REST para gerenciar o uso de equipamentos por funcionários de uma empresa. A aplicação permite cadastrar e gerenciar **equipamentos**, **funcionários** e **reservas**, seguindo regras específicas de negócio para garantir o uso adequado dos recursos.
 
 ## Funcionalidades Implementadas
 
@@ -23,21 +23,18 @@ Este projeto é uma solução para o teste técnico proposto, com o objetivo de 
 - Um funcionário **não pode reservar múltiplos equipamentos simultaneamente**
 
 ---
-Este repositório contém a solução para o **teste técnico**, desenvolvido utilizando **NestJS** com **TypeScript**.  
-O projeto tem como objetivo demonstrar **boas práticas de backend**, **organização de código** e uso de alguns conceitos **DDD**.
-
----
 
 ## 📑 Sumário
 
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Arquitetura](#-arquitetura)
-- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [Como Executar o Projeto](#-como-executar-o-projeto)
-- [Testes](#-testes)
-- [Exemplo de Uso da API](#-exemplo-de-uso-da-api)
-- [Melhorias Futuras](#-melhorias-futuras)
-
+- [Funcionalidades Implementadas](#funcionalidades-implementadas)
+- [Regras de Negócio](#regras-de-negócio)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Arquitetura](#Arquitetura)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Como Executar o Projeto](#como-executar-o-projeto)
+- [Alternativa: Rodar via Docker](#alternativa-rodar-via-docker)
+- [Documentação da API](#documentação-da-api)
+- [Testes](#testes)
 
 
 ## 📂 Estrutura do Projeto
@@ -76,7 +73,7 @@ O projeto tem como objetivo demonstrar **boas práticas de backend**, **organiza
 
 ## 🏗 Arquitetura
 
-A aplicação segue a **arquitetura modular do NestJS** com alguns conceitos de **DDD**.
+A aplicação segue a **arquitetura modular do NestJS** com conceitos de **DDD** para organizar o domínio do negócio e também princípios da **Clean Architecture**, garantindo inversão de dependências e isolamento da lógica de negócio das implementações externas,
 
 ### Estrutura de cada módulo (ex: \`Employee\`, \`Equipment\`, \`Reservation\`):
 
@@ -97,7 +94,7 @@ A aplicação segue a **arquitetura modular do NestJS** com alguns conceitos de 
 
 ## 🛠 Tecnologias Utilizadas
 
-- **NestJS** → Framework para aplicações Node.js escaláveis.
+- **NestJS** → Framework para aplicações Node.js.
 - **TypeScript** → Superset do JavaScript com tipagem estática.
 - **Prisma** → ORM para Node.js e TypeScript.
 - **PostgreSQL** → Banco de dados relacional.
@@ -113,44 +110,70 @@ A aplicação segue a **arquitetura modular do NestJS** com alguns conceitos de 
 - Node.js (versão LTS recomendada)
 - npm, yarn ou pnpm
 - Banco de dados PostgreSQL configurado
+- Docker (opcional, caso queira rodar via container)
 
-### Passos
-
-# 1. Clone o repositório:
+### Passos para rodar localmente (considerando que o banco de dados já está configurado)
+### 1. Clone o repositório:
 ```bash
 git clone https://github.com/AlmostZF/Teste-Tecnico-Tellus.git
 cd Teste-Tecnico-Tellus
 ```
 
-# 2. Copie o arquivo de variáveis de ambiente de exemplo:
+### 2. Copie o arquivo de variáveis de ambiente de exemplo:
 ```bash
 cp .env.example .env
 ```
-# 3. Instale as dependências:
+### 3. Instale as dependências:
 ```bash
 npm install
 ```
 
-# 4. Configure o banco de dados no arquivo \`.env\`:
+### 4. Configure o banco de dados no arquivo \.env \:
 ```env
 DATABASE_URL="postgresql://usuario:senha@localhost:5432/nome_banco?schema=public"
 PORT=3000
 ```
 
-# 5. Execute as migrações do Prisma:
+### 5. Execute as migrações do Prisma:
 ```bash
 npx prisma migrate dev
 ```
 
-# 6. Inicie o servidor:
+### 6. Inicie o servidor:
 ```bash
 npm run start
 # ou
 npm run start:dev
 ```
 
-O servidor estará disponível em **http://localhost:3000**  
-(ou na porta definida no \`.env\`).
+### Acesse a API no navegador:
+```
+http://localhost:3000/api
+```
+
+> (ou na porta definida no \`.env\`).
+
+---
+
+## ⚡ Alternativa: Rodar via Docker
+### 1. Buildar as imagens:
+```bash
+docker compose build
+```
+
+### 2. Subir os containers:
+```bash
+docker compose up -d
+```
+
+### 3. O Docker já aplica as migrations automaticamente e inicia o NestJS.
+### Acesse a API no navegador:
+```
+http://localhost:3000/api
+```
+
+> Assim você não precisa instalar Node.js ou PostgreSQL localmente — o Docker cuida de tudo.
+
 
 ## 📖 Documentação da API
 
