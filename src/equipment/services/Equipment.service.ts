@@ -96,7 +96,7 @@ export class EquipmentService {
             throw new BadRequestException(`equipment with id ${id} not found`);
         }
 
-        if (existingEmployee.reservations && existingEmployee.reservations.length > 0) {
+        if (existingEmployee.reservations && existingEmployee.reservations.length > 0 && existingEmployee.reservations.some(reservation => reservation.endDate === null)) {
             throw new ConflictException(`Cannot update equipment with id ${id} because it has associated reservations`);
         }
 
@@ -117,7 +117,9 @@ export class EquipmentService {
         }
 
         const verifyEquipment = await this.equipmentRepository.findById(id);
+
         if (verifyEquipment.reservations && verifyEquipment.reservations.length > 0) {
+
             throw new ConflictException(`Cannot delete equipment with id ${id} because it has associated reservations`);
         }
 

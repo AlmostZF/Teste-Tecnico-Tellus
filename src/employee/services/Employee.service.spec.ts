@@ -22,7 +22,7 @@ describe('EmployeeService', () => {
         equipmentId: 'Equipment1',
         employeeId: 'empployee1',
         startDate: new Date('2025-08-20T10:00:00Z'),
-        endDate: new Date('2025-08-20T12:00:00Z'),
+        endDate: null,
         createdAt: new Date('2025-08-19T10:00:00Z'),
         updatedAt: new Date('2025-08-19T11:00:00Z'),
     };

@@ -58,7 +58,7 @@ export class EmployeeService{
             throw new BadRequestException(`Employee with id ${employee.id} not found`);
         }
         
-        if (existingEmployee.reservations && existingEmployee.reservations.length > 0) {
+        if (existingEmployee.reservations && existingEmployee.reservations.length > 0 && existingEmployee.reservations.some(reservation => reservation.endDate === null)) {
             throw new ConflictException(`Cannot update Employee with id ${existingEmployee.id} because it has associated reservations`);
         }
 
