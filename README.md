@@ -1,98 +1,178 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Teste Técnico – Sistema de Gestão de Equipamentos e Reservas
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este projeto é uma solução para o teste técnico proposto, com o objetivo de desenvolver uma API RESTful para gerenciar o uso de equipamentos por funcionários de uma empresa. A aplicação permite cadastrar e gerenciar **equipamentos**, **funcionários** e **reservas**, seguindo regras específicas de negócio para garantir o uso adequado dos recursos.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Funcionalidades Implementadas
 
-## Description
+- **Cadastro de Equipamentos**  
+  - Criar, atualizar, excluir e listar equipamentos  
+  - Filtro por categoria e status (disponível, em manutenção, emprestado)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Cadastro de Funcionários**  
+  - Criar, atualizar, excluir e listar funcionários  
+  - Filtro por nome
 
-## Project setup
+- **Reserva e Uso de Equipamentos**  
+  - Registrar reservas com data de início  
+  - Finalizar uso com data de término  
+  - Listar registros de uso, exibindo dados do funcionário e equipamento
 
-```bash
-$ npm install
+## Regras de Negócio
+
+- Um equipamento só pode estar reservado por **um funcionário por vez**
+- Um funcionário **não pode reservar múltiplos equipamentos simultaneamente**
+
+---
+Este repositório contém a solução para o **teste técnico**, desenvolvido utilizando **NestJS** com **TypeScript**.  
+O projeto tem como objetivo demonstrar **boas práticas de backend**, **organização de código** e uso de alguns conceitos **DDD**.
+
+---
+
+## 📑 Sumário
+
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Arquitetura](#-arquitetura)
+- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [Como Executar o Projeto](#-como-executar-o-projeto)
+- [Testes](#-testes)
+- [Exemplo de Uso da API](#-exemplo-de-uso-da-api)
+- [Melhorias Futuras](#-melhorias-futuras)
+
+
+
+## 📂 Estrutura do Projeto
+
+```plaintext
+
+├── prisma/                          # Configurações do Prisma ORM (schemas e migrations)
+├── src/                             # Código-fonte da aplicação
+│   ├── app.module.ts                # Módulo raiz da aplicação
+│   ├── main.ts                      # Arquivo de inicialização da aplicação
+│   ├── Enums/                       # Enums utilizados globalmente (status, categorias, etc.)
+│   ├── utils/                       # Funções utilitárias reutilizáveis
+│   ├── Domain/                      # Camada de domínio da aplicação (DDD)
+│   │   ├── Dtos/                    # Data Transfer Objects (validação e transporte de dados)
+│   │   │   └── exampleDto.ts
+│   │   ├── Mapper/                  # Conversão entre entidades e DTOs
+│   │   │   └── exampleMapper.ts
+│   │   ├── Repositories/            # Interfaces e implementações de repositórios
+│   │   │   ├── prisma/              # Implementações usando Prisma ORM
+│   │   │   │   └── prismaExampleRepository.ts
+│   │   │   └── exampleRepository.ts
+│   │   ├── Service/                 # Lógica de negócio e testes unitários
+│   │   │   ├── example.service.ts
+│   │   │   └── example.service.spec.ts
+├── .gitignore                       # Arquivos/pastas a serem ignorados pelo Git
+├── .prettierrc                      # Configurações do Prettier (formatação de código)
+├── eslint.config.mjs                # Configurações do ESLint (padronização de código)
+├── nest-cli.json                    # Configurações do Nest CLI
+├── package.json                     # Dependências e scripts npm do projeto
+├── package-lock.json                # Lockfile das dependências
+├── tsconfig.json                    # Configurações principais do TypeScript
+└── tsconfig.build.json              # Configurações de build para produção
 ```
 
-## Compile and run the project
+---
 
+## 🏗 Arquitetura
+
+A aplicação segue a **arquitetura modular do NestJS** com alguns conceitos de **DDD**.
+
+### Estrutura de cada módulo (ex: \`Employee\`, \`Equipment\`, \`Reservation\`):
+
+- **Controller** → Define as rotas e lida com as requisições HTTP.
+- **DTOs** → Validação e formatação de entrada/saída de dados.
+- **Mapper** → Conversão entre entidades (banco) e DTOs.
+- **Repository** → Interfaces e implementações de acesso ao banco via Prisma.
+- **Service** → Contém a lógica de negócio e testes unitários.
+- **Module** → Configura a injeção de dependências do módulo.
+
+### Diretórios comuns:
+
+- **Database** → Configurações do Prisma ORM.
+- **Utils** → Funções reutilizáveis.
+- **Enums** → Constantes de status e categorias de produtos.
+
+---
+
+## 🛠 Tecnologias Utilizadas
+
+- **NestJS** → Framework para aplicações Node.js escaláveis.
+- **TypeScript** → Superset do JavaScript com tipagem estática.
+- **Prisma** → ORM para Node.js e TypeScript.
+- **PostgreSQL** → Banco de dados relacional.
+- **ESLint** → Padronização e análise de código.
+- **Prettier** → Formatador de código.
+
+---
+
+## ▶️ Como Executar o Projeto
+
+### Pré-requisitos
+
+- Node.js (versão LTS recomendada)
+- npm, yarn ou pnpm
+- Banco de dados PostgreSQL configurado
+
+### Passos
+
+# 1. Clone o repositório:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/AlmostZF/Teste-Tecnico-Tellus.git
+cd Teste-Tecnico-Tellus
 ```
 
-## Run tests
-
+# 2. Copie o arquivo de variáveis de ambiente de exemplo:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
+```
+# 3. Instale as dependências:
+```bash
+npm install
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# 4. Configure o banco de dados no arquivo \`.env\`:
+```env
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/nome_banco?schema=public"
+PORT=3000
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+# 5. Execute as migrações do Prisma:
+```bash
+npx prisma migrate dev
+```
 
-## Resources
+# 6. Inicie o servidor:
+```bash
+npm run start
+# ou
+npm run start:dev
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+O servidor estará disponível em **http://localhost:3000**  
+(ou na porta definida no \`.env\`).
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 📖 Documentação da API
 
-## Support
+A API está documentada com **Swagger**.  
+Após iniciar o servidor, acesse:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+👉 **[http://localhost:3000/api](http://localhost:3000/api)**
 
-## Stay in touch
+Lá você poderá visualizar e testar todos os endpoints diretamente pelo navegador.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+## 🧪 Testes
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Para rodar os testes unitários:
+
+```bash
+npm run test
+```
+
+ou caso queira rodar os testes pearamadente 
+```bash
+npm run test -- reservation.service.spec.ts
+npm run test -- employee.service.spec.ts
+npm run test -- equipment.service.spec.ts
+```

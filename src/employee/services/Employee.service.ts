@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ReturnEmployeeDto } from "../dtos/ReturnEmployeeDto";
 import { EmployeeRepository } from "../repositories/EmployeeRespository";
 import { CreateEmployeeDto } from "../dtos/CreateEmployeeDto";
@@ -57,6 +57,10 @@ export class EmployeeService{
         if(!existingEmployee){
             throw new BadRequestException(`Employee with id ${employee.id} not found`);
         }
+        
+        if (existingEmployee.reservations && existingEmployee.reservations.length > 0) {
+            throw new ConflictException(`Cannot update Employee with id ${existingEmployee.id} because it has associated reservations`);
+        }
 
         try {
             return await this.employeeRepository.update(employee);
@@ -74,6 +78,9 @@ export class EmployeeService{
         const existingEmployee = await this.employeeRepository.findById(employee.id);
         if(!existingEmployee){
             throw new BadRequestException(`Employee with id ${employee.id} not found`);
+        }
+        if (existingEmployee.reservations && existingEmployee.reservations.length > 0) {
+            throw new ConflictException(`Cannot delete Employee with id ${existingEmployee.id} because it has associated reservations`);
         }
 
         try {

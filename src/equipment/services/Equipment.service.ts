@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { EquipmentRepository } from '../repositories/EquipmentRepository';
 
 import { Categories, categoriesToEquipmentMap } from '../../enums/Categories';
@@ -96,6 +96,10 @@ export class EquipmentService {
             throw new BadRequestException(`equipment with id ${id} not found`);
         }
 
+        if (existingEmployee.reservations && existingEmployee.reservations.length > 0) {
+            throw new ConflictException(`Cannot update equipment with id ${id} because it has associated reservations`);
+        }
+
         try {
             return await this.equipmentRepository.update(equipment);
         } catch (error) {
@@ -114,7 +118,7 @@ export class EquipmentService {
 
         const verifyEquipment = await this.equipmentRepository.findById(id);
         if (verifyEquipment.reservations && verifyEquipment.reservations.length > 0) {
-            throw new BadRequestException(`Cannot delete equipment with id ${id} because it has associated reservations`);
+            throw new ConflictException(`Cannot delete equipment with id ${id} because it has associated reservations`);
         }
 
         try {

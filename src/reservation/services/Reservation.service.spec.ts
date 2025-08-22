@@ -14,9 +14,9 @@ describe('ReservationService', () => {
     let repository: jest.Mocked<ReservationRepository>;
 
     const mockReservation: ReservationWithEmployeeAndEquipment = {
-        id: 'res1',
-        employeeId: 'emp1',
-        equipmentId: 'eq1',
+        id: 'reseservation1',
+        employeeId: 'employee1',
+        equipmentId: 'equipment1',
         startDate: new Date('2025-08-21T00:00:00Z'),
         endDate: null,
         createdAt: new Date(),
@@ -26,7 +26,7 @@ describe('ReservationService', () => {
         },
         equipment: {
             name: 'Notebook Dell',
-            id: 'eq1',
+            id: 'equipment1',
             createdAt: new Date(),
             updatedAt: new Date(),
             status: statusToEquipmentMap[Status.AVAILABLE],
@@ -36,7 +36,7 @@ describe('ReservationService', () => {
 
     const mockMapper = {
         toReturnDto: jest.fn().mockImplementation((reservation) => reservation),
-        toCreateEntity: jest.fn().mockImplementation((dto) => ({ ...dto, id: 'res1' })),
+        toCreateEntity: jest.fn().mockImplementation((dto) => ({ ...dto, id: 'reseservation1' })),
         toReturnFormattedDtoList: jest.fn().mockImplementation((closed, active) => ({
             closedReservations: closed,
             activeReservations: active
@@ -70,8 +70,8 @@ describe('ReservationService', () => {
 
     describe('createReservation', () => {
         const dto: CreateReservationDto = {
-            employeeId: 'emp1',
-            equipmentId: 'eq1',
+            employeeId: 'employee1',
+            equipmentId: 'equipment1',
             startDate: new Date(),
         };
 
@@ -109,7 +109,7 @@ describe('ReservationService', () => {
             repository.createReservation.mockResolvedValue(mockReservation);
 
             const result = await service.createReservation(dto);
-            expect(result.data[0].id).toBe('res1');
+            expect(result.data[0].id).toBe('reseservation1');
         });
 
         it('deve lançar erro interno ao criar reserva', async () => {
@@ -129,13 +129,13 @@ describe('ReservationService', () => {
 
         it('deve finalizar reserva com sucesso', async () => {
             repository.finishReservation.mockResolvedValue(undefined);
-            const result = await service.finishReservation('res1');
+            const result = await service.finishReservation('reseservation1');
             expect(result).toEqual({ success: true });
         });
 
         it('deve lançar erro interno ao finalizar reserva', async () => {
             repository.finishReservation.mockRejectedValue(new Error());
-            await expect(service.finishReservation('res1')).rejects.toThrow(InternalServerErrorException);
+            await expect(service.finishReservation('reseservation1')).rejects.toThrow(InternalServerErrorException);
         });
     });
 
@@ -146,13 +146,13 @@ describe('ReservationService', () => {
 
         it('deve retornar a reserva do funcionário', async () => {
             repository.filterReservationByEmployeeId.mockResolvedValue(mockReservation);
-            const result = await service.filterReservationByEmployeeId('emp1');
-            expect(result.data[0].id).toBe('res1');
+            const result = await service.filterReservationByEmployeeId('employee1');
+            expect(result.data[0].id).toBe('reseservation1');
         });
 
         it('deve lançar erro interno ao buscar por funcionário', async () => {
             repository.filterReservationByEmployeeId.mockRejectedValue(new Error());
-            await expect(service.filterReservationByEmployeeId('emp1')).rejects.toThrow(InternalServerErrorException);
+            await expect(service.filterReservationByEmployeeId('employee1')).rejects.toThrow(InternalServerErrorException);
         });
     });
 
@@ -163,26 +163,26 @@ describe('ReservationService', () => {
 
         it('deve retornar reserva do equipamento', async () => {
             repository.filterReservationByEquipmentId.mockResolvedValue(mockReservation);
-            const result = await service.filterReservationByEquipmentId('eq1');
-            expect(result.data[0].id).toBe('res1');
+            const result = await service.filterReservationByEquipmentId('equipment1');
+            expect(result.data[0].id).toBe('reseservation1');
         });
 
         it('deve lançar erro interno ao buscar por equipamento', async () => {
             repository.filterReservationByEquipmentId.mockRejectedValue(new Error());
-            await expect(service.filterReservationByEquipmentId('eq1')).rejects.toThrow(InternalServerErrorException);
+            await expect(service.filterReservationByEquipmentId('equipment1')).rejects.toThrow(InternalServerErrorException);
         });
     });
 
     describe('filterReservation', () => {
         it('deve retornar reserva filtrada', async () => {
             repository.filterReservation.mockResolvedValue(mockReservation);
-            const result = await service.filterReservation(new Date(), 'emp1', 'eq1');
-            expect(result.data[0].id).toBe('res1');
+            const result = await service.filterReservation(new Date(), 'employee1', 'equipment1');
+            expect(result.data[0].id).toBe('reseservation1');
         });
 
         it('deve lançar erro interno ao filtrar reserva', async () => {
             repository.filterReservation.mockRejectedValue(new Error());
-            await expect(service.filterReservation(new Date(), 'emp1', 'eq1')).rejects.toThrow(InternalServerErrorException);
+            await expect(service.filterReservation(new Date(), 'employee1', 'equipment1')).rejects.toThrow(InternalServerErrorException);
         });
     });
 

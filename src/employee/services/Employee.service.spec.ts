@@ -17,6 +17,16 @@ describe('EmployeeService', () => {
         reservations: [],
     };
 
+    let mockReservation = {
+        id: 'reservation1',
+        equipmentId: 'Equipment1',
+        employeeId: 'empployee1',
+        startDate: new Date('2025-08-20T10:00:00Z'),
+        endDate: new Date('2025-08-20T12:00:00Z'),
+        createdAt: new Date('2025-08-19T10:00:00Z'),
+        updatedAt: new Date('2025-08-19T11:00:00Z'),
+    };
+
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
@@ -95,7 +105,21 @@ describe('EmployeeService', () => {
         it('should throw error if id missing', async () => {
             await expect(service.update({} as any)).rejects.toThrow('Id cannot be empty');
         });
+
+            it('should not update equipment with employee', async () => {
+
+            repository.findById.mockResolvedValue({
+                ...MockDto,
+                reservations: [mockReservation],
+            });
+
+            await expect(service.update(MockDto)).rejects.toThrow(
+                `Cannot update Employee with id ${MockDto.id} because it has associated reservations`,
+            );
+        });
     });
+
+
     describe('delete', () => {
         const deleteDto = { id: '1' };
 
@@ -111,6 +135,18 @@ describe('EmployeeService', () => {
 
         it('should throw error if id missing', async () => {
             await expect(service.delete({} as any)).rejects.toThrow('Id cannot be empty');
+        });
+
+        it('should not delete equipment with employee', async () => {
+
+            repository.findById.mockResolvedValue({
+                ...MockDto,
+                reservations: [mockReservation],
+            });
+
+            await expect(service.delete({ id: '1' })).rejects.toThrow(
+                `Cannot delete Employee with id ${MockDto.id} because it has associated reservations`,
+            );
         });
 
     });

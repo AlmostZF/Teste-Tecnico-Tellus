@@ -20,9 +20,9 @@ describe('EquipmentService', () => {
         reservations: []
     }
     let mockReservation = {
-        id: 'r1',
+        id: 'reservation1',
         equipmentId: '1',
-        employeeId: 'emp1',
+        employeeId: 'employee1',
         startDate: new Date('2025-08-20T10:00:00Z'),
         endDate: new Date('2025-08-20T12:00:00Z'),
         createdAt: new Date('2025-08-19T10:00:00Z'),
@@ -97,6 +97,31 @@ describe('EquipmentService', () => {
         expect(result).toEqual(updateDto);
         });
 
+        it('should not update equipment with reservations', async () => {
+
+            repository.findById.mockResolvedValue({
+                id: '1',
+                name: 'Furadeira',
+                category: Categories.CAMERA,
+                status: Status.BORROWED,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                reservations: [mockReservation],
+            });
+
+            const mockUpdate ={
+                id: '1',
+                name: 'Furadeira',
+                category: Categories.CAMERA,
+                status: Status.BORROWED,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                reservations: [mockReservation],
+            } 
+            await expect(service.update(mockUpdate)).rejects.toThrow(
+                `Cannot update equipment with id ${mockUpdate.id} because it has associated reservations`,
+            );
+        });
     })
 
     describe('delete', () => {
@@ -129,7 +154,7 @@ describe('EquipmentService', () => {
 
         it('should not delete equipment with reservations', async () => {
 
-            repository.findById.mockResolvedValue({
+            const mock = {
                 id: '1',
                 name: 'Furadeira',
                 category: Categories.CAMERA,
@@ -137,10 +162,11 @@ describe('EquipmentService', () => {
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 reservations: [mockReservation],
-            });
+            }
+            repository.findById.mockResolvedValue(mock);
 
             await expect(service.delete({ id: '1' })).rejects.toThrow(
-                `Cannot delete equipment with id 1 because it has associated reservations`,
+                `Cannot delete equipment with id ${mock.id} because it has associated reservations`,
             );
         });
     })
